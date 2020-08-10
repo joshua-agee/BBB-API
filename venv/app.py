@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 @app.before_request
-def before_request();
+def before_request():
     """connect to the db before each request"""
     g.db = models.db
     g.db.connect()
