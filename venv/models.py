@@ -1,11 +1,9 @@
 from peewee import *
 import datetime
 from flask_login import UserMixin
-import json
 from playhouse.postgres_ext import *
 
-db = PostgresqlExtDatabase('postgres')
-
+db = PostgresqlExtDatabase('postgres', user='postgres', password='123456')
 class BaseModel(Model):
     class Meta:
         database = db #use a root class to specify database for all models
@@ -16,7 +14,7 @@ class User(BaseModel, UserMixin):
     email = CharField()
 
 class Recipe(BaseModel):
-    name = CharField(required=True)
+    name = CharField()
     summary = TextField()
     ingredients = BinaryJSONField()
     directions = BinaryJSONField()
