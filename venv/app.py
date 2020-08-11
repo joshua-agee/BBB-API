@@ -31,7 +31,7 @@ app.register_blueprint(recipe, url_prefix='/recipes')
 
 @app.route('/')
 def index():
-    return 'Hello There'
+    return jsonify(data={['one', 'two', 'three']}, status={"code": 200, "message": "example"})
 
 
 if __name__ == '__main__':

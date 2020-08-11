@@ -16,12 +16,12 @@ class User(BaseModel, UserMixin):
 class Recipe(BaseModel):
     name = CharField()
     summary = TextField()
-    ingredients = ArrayField(CharField)
+    ingredients = BinaryJSONField()
     directions = BinaryJSONField()
     source = CharField()
-    # contributor = ForeignKeyField(User, backref='recipes')
-    # likes = IntegerField()
-    # photo = CharField()
+    contributor = ForeignKeyField(User, backref='recipes')
+    likes = IntegerField(default=0)
+    photo = CharField(default="")
 
 class Comment(BaseModel):
     by_user = ForeignKeyField(User, backref='comments')
