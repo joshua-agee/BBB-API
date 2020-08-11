@@ -7,9 +7,22 @@ PORT = 8000
 
 import models
 from resources.recipes import recipe
+from resources.users import user
+
+login_manager = LoginManager()
 
 app = Flask(__name__)
 
+app.secret_key = "9bPX7bEpKpsFvjXQ"
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(userid):
+    try:
+        return models.User.get(models.User.id == userid)
+    except models.DoesNotExist:
+        return None
 
 @app.before_request
 def before_request():
@@ -23,15 +36,15 @@ def after_request(response):
     g.db.close()
     return response
 
-CORS(recipe, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(recipe, origins=["http://localhost:3000"], supports_credentials=True)
+CORS(user, origins=["http://localhost:3000"], supports_credentials=True)
 
+app.register_blueprint(recipe, url_prefix="/recipes")
+app.register_blueprint(user, url_prefix="/user")
 
-app.register_blueprint(recipe, url_prefix='/recipes')
-
-
-@app.route('/')
+@app.route("/")
 def index():
-    return jsonify(data={['one', 'two', 'three']}, status={"code": 200, "message": "example"})
+    return jsonify(data={}, status={"code": 200, "message": "Hello World"})
 
 
 if __name__ == '__main__':
