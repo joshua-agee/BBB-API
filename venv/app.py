@@ -26,7 +26,7 @@ def after_request(response):
 CORS(recipe, origins=['http://localhost:3000'], supports_credentials=True)
 
 
-app.register_blueprint(recipe, url_prefix='/recipe')
+app.register_blueprint(recipe, url_prefix='/recipes')
 
 
 @app.route('/')
@@ -35,4 +35,5 @@ def index():
 
 
 if __name__ == '__main__':
+    models.initialize()
     app.run(debug=DEBUG, port=PORT)
