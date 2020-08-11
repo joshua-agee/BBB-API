@@ -3,9 +3,9 @@ from flask import Blueprint, jsonify, request
 from playhouse.shortcuts import model_to_dict
 from flask_login import current_user, login_required
 
-recipe = Blueprint('recipes', 'recipe')
+recipe = Blueprint("recipes", "recipe")
 
-@recipe.route('/', methods=['GET'])
+@recipe.route("/", methods=["GET"])
 def get_all_recipes():
     try:
         recipes = [model_to_dict(recipe) for recipe in models.Recipe.select()]
@@ -14,10 +14,38 @@ def get_all_recipes():
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
 
-@recipe.route('/', methods=['POST'])
+@recipe.route("/", methods=["POST"])
 def create_recipe():
     payload = request.get_json()
     print(payload)
     new_recipe = models.Recipe.create(**payload)
     recipe_data = model_to_dict(new_recipe)
     return jsonify(data=recipe_data, status={"code": 200, "message":"Success"})
+
+@recipe.route("/<id>", methods=["GET"])
+def get_one_recipe(id):
+    try:
+        recipe = models.Recipe.get_by_id(id)
+        recipe_dict = model_to_dict(recipe)
+        return jsonify(data=recipe_dict, status={"code": 200, "message": "Success"})
+    except models.DoesNotExist:
+        return jsonify(data={}, status={"code": 401, "message":"That id does not exist"})
+
+@recipe.route("/<id>", methods=["PUT"])
+def update_recipe(id):
+    payload = request.get_json()
+    update_query = models.Recipe.update(**payload).where(models.Recipe.id == id)
+    update_query.execute()
+    return jsonify(
+        data=model_to_dict(models.Recipe.get_by_id(id)), 
+        status={"code":200, "message": "record update"})
+
+@recipe.route("/<id>", methods=["DELETE"])
+def delete_recipe(id):
+    delete_query = models.Recipe.delete().where(models.Recipe.id == id)
+    delete_query.execute()
+    return jsonify(
+        data={},
+        message="Successfully deleted recipe with id {}".format(id),
+        status= 200
+    )
