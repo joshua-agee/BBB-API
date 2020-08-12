@@ -48,7 +48,20 @@ def login():
 #Return current user data
 @user.route("/id", methods=["GET"])
 def get_user():
-    return jsonify(data=model_to_dict(current_user), status={"code": 200, "message": "Success"})
+    return jsonify(
+        # recipes submitted by current user - backref method
+        user_backref_recipes=[model_to_dict(recipe) for recipe in models.User.get(models.User.id == current_user.id).recipes],
+        # current user object
+        current_user_obj=model_to_dict(current_user), 
+        # recipes submitted by current user - where method
+        user_recipes=[model_to_dict(recipe) for recipe in models.Recipe.select().join(models.User).where(models.User.id == current_user.id)], 
+        # recipes liked by current user where method
+        liked_recipes=[model_to_dict(recipe) for recipe in models.Recipe.select().join(models.Like).where(models.Like.by_user == current_user.id)],
+        # recipes liked by current user backref method
+        liked_recipes_backref=[model_to_dict(recipe) for recipe in models.User.get(models.User.id == current_user.id).likes],
+        #comments by burrent user backref method
+        user_backref_comments=[model_to_dict(comment) for comment in models.User.get(models.User.id == current_user.id).comments],
+        status={"code": 200, "message": "Success"})
 
 #Logout current user
 @user.route("/logout", methods=["GET"])
