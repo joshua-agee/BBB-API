@@ -20,7 +20,6 @@ class Recipe(BaseModel):
     directions = BinaryJSONField()
     source = CharField()
     contributor = ForeignKeyField(User, backref='recipes')
-    likes = IntegerField(default=0)
     photo = CharField(default="")
 
 class Comment(BaseModel):
