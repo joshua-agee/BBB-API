@@ -11,13 +11,19 @@ recipe = Blueprint("recipes", "recipe")
 def get_all_recipes():
     try:
         # add likes and comments lookup here?
-        recipes = [model_to_dict(recipe, recipe.likes) for recipe 
-            in models.Recipe.select(models.Recipe,
-            fn.COUNT(models.Like.id).alias('likes'))
-            .join(models.Like, JOIN.LEFT_OUTER)
-            .group_by(models.Recipe)]
-        print(recipes)
-        return jsonify(data=recipes, status={"code": 200, "message": "Success"})
+        # recipes = [model_to_dict(recipe, recipe.likes) for recipe 
+        #     in models.Recipe.select(models.Recipe,
+        #     fn.COUNT(models.Like.id).alias('likes'))
+        #     .join(models.Like, JOIN.LEFT_OUTER)
+        #     .group_by(models.Recipe)]
+        # print(recipes)
+        query = models.Recipe.select(models.Recipe, fn.COUNT(models.Like.on_recipe).alias('likes'), fn.COUNT(models.Comment.on_recipe).alias('comments')).join(models.Like, JOIN.LEFT_OUTER).switch(models.Recipe).join(models.Comment, JOIN.LEFT_OUTER).group_by(models.Recipe.id).order_by(models.Recipe.id)
+        recipes = [model_to_dict(recipe) for recipe in query]
+        for recipe in query:
+            print(recipe.name, recipe.likes, recipe.comments)
+
+        # return jsonify(data=model_to_dict(query), status={"code": 200, "message": "Success"})
+        return "recipes"
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
 
