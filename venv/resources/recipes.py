@@ -9,6 +9,7 @@ recipe = Blueprint("recipes", "recipe")
 @recipe.route("/", methods=["GET"])
 def get_all_recipes():
     try:
+        # add likes and comments lookup here?
         recipes = [model_to_dict(recipe) for recipe in models.Recipe.select()]
         print(recipes)
         return jsonify(data=recipes, status={"code": 200, "message": "Success"})
