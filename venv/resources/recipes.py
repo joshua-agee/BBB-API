@@ -11,7 +11,11 @@ recipe = Blueprint("recipes", "recipe")
 def get_all_recipes():
     try:
         # add likes and comments lookup here?
-        recipes = [model_to_dict(recipe) for recipe in models.Recipe.select()]
+        recipes = [model_to_dict(recipe, recipe.likes) for recipe 
+            in models.Recipe.select(models.Recipe,
+            fn.COUNT(models.Like.id).alias('likes'))
+            .join(models.Like, JOIN.LEFT_OUTER)
+            .group_by(models.Recipe)]
         print(recipes)
         return jsonify(data=recipes, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:
