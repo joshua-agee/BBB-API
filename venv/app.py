@@ -8,7 +8,6 @@ PORT = 8000
 import models
 from resources.recipes import recipe
 from resources.users import user
-from resources.likes import like
 from resources.comments import comment
 
 
@@ -41,12 +40,10 @@ def after_request(response):
 
 CORS(recipe, origins=["http://localhost:3000"], supports_credentials=True)
 CORS(user, origins=["http://localhost:3000"], supports_credentials=True)
-CORS(like, origins=["http://localhost:3000"], supports_credentials=True)
 CORS(comment, origins=["http://localhost:3000"], supports_credentials=True)
 
 app.register_blueprint(recipe, url_prefix="/recipes")
 app.register_blueprint(user, url_prefix="/user")
-app.register_blueprint(like, url_prefix="/like")
 app.register_blueprint(comment, url_prefix="/comment")
 
 @app.route("/")
