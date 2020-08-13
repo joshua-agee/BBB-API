@@ -44,7 +44,8 @@ def get_one_recipe(id):
     try:
         recipe = models.Recipe.get_by_id(id)
         recipe_dict = model_to_dict(recipe)
-        return jsonify(data=recipe_dict, status={"code": 200, "message": "Success"})
+        likes = models.Like.select().where(models.Like.on_recipe == id).count()
+        return jsonify(data=recipe_dict, likes=likes, status={"code": 200, "message": "Success"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message":"That id does not exist"})
 
