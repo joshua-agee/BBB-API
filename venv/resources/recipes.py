@@ -18,12 +18,13 @@ def get_all_recipes():
         #     .group_by(models.Recipe)]
         # print(recipes)
         query = models.Recipe.select(models.Recipe, fn.COUNT(models.Like.on_recipe).alias('likes'), fn.COUNT(models.Comment.on_recipe).alias('comments')).join(models.Like, JOIN.LEFT_OUTER).switch(models.Recipe).join(models.Comment, JOIN.LEFT_OUTER).group_by(models.Recipe.id).order_by(models.Recipe.id)
-        recipes = [model_to_dict(recipe) for recipe in query]
+        recipes = [model_to_dict(recipe) for recipe in query.objects()]
         for recipe in query:
             print(recipe.name, recipe.likes, recipe.comments)
-
+            # recipes[recipe]["num_likes"] = recipe.likes
+            # recipes[recipe]["num_comments"] = recipe.comments
         # return jsonify(data=model_to_dict(query), status={"code": 200, "message": "Success"})
-        return "recipes"
+        return jsonify(recipes=recipes, status={"code": 200, "message":"success"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
 
