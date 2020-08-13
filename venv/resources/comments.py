@@ -51,4 +51,10 @@ def update_comment():
 
 #delete comment
 @comment.route("/<id>", methods=["DELETE"])
-def delete_comment(id)
+def delete_comment(id):
+    try:
+        delete_query = models.Comment.delete().where(models.Comment.id == id, models.Comment.by_user == current_user.id)
+        delete_query.execute()
+        return jsonify(data={}, status={"code": 200, "message": "success"})
+    except model.DoesNotExist:
+        return jsonify(data={}, status={"code": 401, "message": "does not exist or not allowed by current user"})

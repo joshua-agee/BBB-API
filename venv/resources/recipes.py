@@ -58,6 +58,18 @@ def update_recipe(id):
         data=model_to_dict(models.Recipe.get_by_id(id)), 
         status={"code":200, "message": "record update"})
 
+#like recipe toggle
+@recipe.route("/<id>/like", methods=["POST"])
+def toggle_like_recipe(id):
+    try:
+        like = models.Like.get(models.Like.on_recipe==id, models.Like.by_user==current_user.id)
+        like.delete_instance()
+        return jsonify(data={}, status={"code": 200, "message": "unliked"})
+    except models.DoesNotExist:
+        like = models.Like.create(on_recipe=id, by_user=current_user.id)
+        return jsonify(data={}, status={"code": 200, "message": "liked"})
+
+
 # Delete recipe
 @recipe.route("/<id>", methods=["DELETE"])
 def delete_recipe(id):
