@@ -41,6 +41,6 @@ class Like(BaseModel):
 
 def initialize():
     db.connect()
-    db.create_tables([User, Recipe, Comment, Like], safe=True)
+    db.create_tables([User, Recipe, Comment, Like])
     print('tables created')
     db.close()
