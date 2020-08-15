@@ -22,9 +22,9 @@ else:
     app.secret_key = "9bPX7bEpKpsFvjXQ"
 login_manager.init_app(app)
 
-CORS(recipe, origins=["http://localhost:3000"], supports_credentials=True)
-CORS(user, origins=["http://localhost:3000"], supports_credentials=True)
-CORS(comment, origins=["http://localhost:3000"], supports_credentials=True)
+CORS(recipe, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
+CORS(user, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
+CORS(comment, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
 
 app.register_blueprint(recipe, url_prefix="/recipes")
 app.register_blueprint(user, url_prefix="/user")
