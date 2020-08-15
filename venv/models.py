@@ -2,8 +2,14 @@ from peewee import *
 import datetime
 from flask_login import UserMixin
 from playhouse.postgres_ext import *
+import os
+from playhouse.db_url import connect
 
-db = PostgresqlExtDatabase('postgres', user='postgres', password='123456')
+if 'ON_HEROKU' in os.environ:
+    db = connect(os.environ.get('DATABASE_URL'))
+
+else:
+    db = PostgresqlExtDatabase('postgres', user='postgres', password='123456')
 class BaseModel(Model):
     class Meta:
         database = db #use a root class to specify database for all models

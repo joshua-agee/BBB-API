@@ -1,6 +1,7 @@
 from flask import Flask, g, render_template, jsonify
 from flask_cors import CORS
 from flask_login import LoginManager
+import os
 
 DEBUG = True
 PORT = 8000
@@ -15,9 +16,19 @@ login_manager = LoginManager()
 
 app = Flask(__name__)
 
-app.secret_key = "9bPX7bEpKpsFvjXQ"
+if 'SECRET_KEY' in os.environ:
+    app.secret_key = os.environ.get('SECRET_KEY')
+else:
+    app.secret_key = "9bPX7bEpKpsFvjXQ"
 login_manager.init_app(app)
 
+CORS(recipe, origins=["http://localhost:3000"], supports_credentials=True)
+CORS(user, origins=["http://localhost:3000"], supports_credentials=True)
+CORS(comment, origins=["http://localhost:3000"], supports_credentials=True)
+
+app.register_blueprint(recipe, url_prefix="/recipes")
+app.register_blueprint(user, url_prefix="/user")
+app.register_blueprint(comment, url_prefix="/comment")
 
 @login_manager.user_loader
 def load_user(userid):
@@ -38,17 +49,14 @@ def after_request(response):
     g.db.close()
     return response
 
-CORS(recipe, origins=["http://localhost:3000"], supports_credentials=True)
-CORS(user, origins=["http://localhost:3000"], supports_credentials=True)
-CORS(comment, origins=["http://localhost:3000"], supports_credentials=True)
-
-app.register_blueprint(recipe, url_prefix="/recipes")
-app.register_blueprint(user, url_prefix="/user")
-app.register_blueprint(comment, url_prefix="/comment")
 
 @app.route("/")
 def index():
     return jsonify(data={}, status={"code": 200, "message": "Hello World"})
+
+if 'ON_HEROKU' in os.environ:
+    print('\non heroku!')
+    models.initialize()
 
 
 if __name__ == '__main__':
