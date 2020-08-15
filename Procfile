@@ -1,2 +1,2 @@
-web:gunicorn 
-app: . venv/app
+web: gunicorn 
+app: app
