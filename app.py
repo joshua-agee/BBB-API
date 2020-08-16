@@ -26,9 +26,9 @@ CORS(recipe, origins=["http://localhost:3000", "https://breadbakingbuddy.herokua
 CORS(user, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
 CORS(comment, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
 
-app.register_blueprint(recipe, url_prefix="/recipes")
-app.register_blueprint(user, url_prefix="/user")
-app.register_blueprint(comment, url_prefix="/comment")
+app.register_blueprint(recipe, url_prefix="/api/v1/recipes")
+app.register_blueprint(user, url_prefix="/api/v1/user")
+app.register_blueprint(comment, url_prefix="/api/v1/comment")
 
 @login_manager.user_loader
 def load_user(userid):
