@@ -22,6 +22,7 @@ else:
     app.secret_key = "9bPX7bEpKpsFvjXQ"
 login_manager.init_app(app)
 
+CORS(app)
 CORS(recipe, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
 CORS(user, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
 CORS(comment, origins=["http://localhost:3000", "https://breadbakingbuddy.herokuapp.com"], supports_credentials=True)
