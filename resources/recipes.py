@@ -32,8 +32,8 @@ def get_all_recipes():
 @recipe.route("/", methods=["POST"])
 def create_recipe():
     payload = request.get_json()
-    print(payload)
-    print(current_user)
+    # print(payload)
+    # print(current_user)
     payload["contributor_id"] = current_user.id
     new_recipe = models.Recipe.create(**payload)
     recipe_data = model_to_dict(new_recipe)
