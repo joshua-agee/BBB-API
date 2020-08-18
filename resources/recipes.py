@@ -30,6 +30,7 @@ def get_all_recipes():
 
 # Create a new recipe
 @recipe.route("/", methods=["POST"])
+@login_required
 def create_recipe():
     payload = request.get_json()
     # print(payload)
@@ -52,6 +53,7 @@ def get_one_recipe(id):
 
 # Update recipe
 @recipe.route("/<id>", methods=["PUT"])
+@login_required
 def update_recipe(id):
     payload = request.get_json()
     update_query = models.Recipe.update(**payload).where(models.Recipe.id == id)
@@ -62,6 +64,7 @@ def update_recipe(id):
 
 #like recipe toggle
 @recipe.route("/<id>/like", methods=["POST"])
+@login_required
 def toggle_like_recipe(id):
     try:
         like = models.Like.get(models.Like.on_recipe==id, models.Like.by_user==current_user.id)
@@ -74,6 +77,7 @@ def toggle_like_recipe(id):
 
 # Delete recipe
 @recipe.route("/<id>", methods=["DELETE"])
+@login_required
 def delete_recipe(id):
     delete_query = models.Recipe.delete().where(models.Recipe.id == id)
     delete_query.execute()

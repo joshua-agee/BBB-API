@@ -2,7 +2,7 @@ import models
 
 from flask import Blueprint, request, jsonify
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from playhouse.shortcuts import model_to_dict
 
 user = Blueprint("users", "user", url_prefix="/user")
@@ -47,6 +47,7 @@ def login():
 
 #Return current user data
 @user.route("/id", methods=["GET"])
+@login_required
 def get_user():
     return jsonify(
         # recipes submitted by current user - backref method
