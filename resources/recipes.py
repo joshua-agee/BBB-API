@@ -4,7 +4,7 @@ from playhouse.shortcuts import model_to_dict
 from flask_login import current_user, login_required
 from peewee import *
 
-recipe = Blueprint("recipes", "recipe")
+recipe = Blueprint("recipes", "recipe", url_prefix="/recipes")
 
 # Get all recipes
 @recipe.route("/", methods=["GET"])
