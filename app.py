@@ -19,7 +19,7 @@ app = Flask(__name__)
 if 'SECRET_KEY' in os.environ:
     app.secret_key = os.environ.get('SECRET_KEY')
 else:
-    app.secret_key = "9bPX7bEpKpsFvjXQ"
+    app.secret_key = "9bPX7bEpKpsFvjXQ" #local dev only
 login_manager.init_app(app)
 
 CORS(app)
