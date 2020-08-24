@@ -19,11 +19,10 @@ def get_all_comments():
 def get_recipe_comments(recipe_id):
     try:
         # comments = models.Comment.select().where(models.Comment.on_recipe == recipe_id)
-        comments = {}
+        comments = []
         data = [model_to_dict(comment) for comment in models.Comment.select(models.Comment.id, models.Comment.title, models.Comment.comment, models.Comment.by_user).where(models.Comment.on_recipe == recipe_id).objects()]
         for comment in data:
-            key = comment['id']
-            comments[key] = comment
+            comments.append(comment)
         return jsonify(data=comments, status={"code": 200, "message":"success"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
