@@ -21,12 +21,9 @@ def get_recipe_comments(recipe_id):
         # comments = models.Comment.select().where(models.Comment.on_recipe == recipe_id)
         comments = {}
         data = [model_to_dict(comment) for comment in models.Comment.select(models.Comment.id, models.Comment.title, models.Comment.comment, models.Comment.by_user).where(models.Comment.on_recipe == recipe_id).objects()]
-        print(type(data))
         for comment in data:
             key = comment['id']
             comments[key] = comment
-            print(comment, type(comment))
-        print('Comments: ', comments)
         return jsonify(data=comments, status={"code": 200, "message":"success"})
     except models.DoesNotExist:
         return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
